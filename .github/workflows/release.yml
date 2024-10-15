@@ -51,8 +51,7 @@ jobs:
       - name: publish documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./docs
 
       - name: Build wheels and source tarball
         run: >-
