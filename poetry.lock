@@ -276,6 +276,17 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "bracex"
+version = "2.5.post1"
+description = "Bash style brace expander."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "bracex-2.5.post1-py3-none-any.whl", hash = "sha256:13e5732fec27828d6af308628285ad358047cec36801598368cb28bc631dbaf6"},
+    {file = "bracex-2.5.post1.tar.gz", hash = "sha256:12c50952415bfa773d2d9ccb8e79651b8cdb1f31a42f6091b804f6ba2b4a66b6"},
+]
+
+[[package]]
 name = "bump2version"
 version = "1.0.1"
 description = "Version-bump your software with a single command!"
@@ -1665,6 +1676,24 @@ files = [
 mergedeep = ">=1.3.4"
 platformdirs = ">=2.2.0"
 pyyaml = ">=5.1"
+
+[[package]]
+name = "mkdocs-include-markdown-plugin"
+version = "6.2.2"
+description = "Mkdocs Markdown includer plugin."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mkdocs_include_markdown_plugin-6.2.2-py3-none-any.whl", hash = "sha256:d293950f6499d2944291ca7b9bc4a60e652bbfd3e3a42b564f6cceee268694e7"},
+    {file = "mkdocs_include_markdown_plugin-6.2.2.tar.gz", hash = "sha256:f2bd5026650492a581d2fd44be6c22f90391910d76582b96a34c264f2d17875d"},
+]
+
+[package.dependencies]
+mkdocs = ">=1.4"
+wcmatch = "*"
+
+[package.extras]
+cache = ["platformdirs"]
 
 [[package]]
 name = "mkdocs-material"
@@ -3164,6 +3193,20 @@ files = [
 watchmedo = ["PyYAML (>=3.10)"]
 
 [[package]]
+name = "wcmatch"
+version = "10.0"
+description = "Wildcard/glob file name matcher."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "wcmatch-10.0-py3-none-any.whl", hash = "sha256:0dd927072d03c0a6527a20d2e6ad5ba8d0380e60870c383bc533b71744df7b7a"},
+    {file = "wcmatch-10.0.tar.gz", hash = "sha256:e72f0de09bba6a04e0de70937b0cf06e55f36f37b3deb422dfaf854b867b840a"},
+]
+
+[package.dependencies]
+bracex = ">=2.1.1"
+
+[[package]]
 name = "yarl"
 version = "1.15.2"
 description = "Yet another URL library"
@@ -3302,4 +3345,4 @@ test = ["black", "flake8", "flake8-docstrings", "isort", "pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "faa328ec0e7a8ad447087a74062603577fbc3900bbe9c45953e13db00b6b33d0"
+content-hash = "4fe4097a33d9a582d61f96804a513320ebcf2bb176744a0ec2d18ec41ae90890"

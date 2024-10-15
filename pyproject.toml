@@ -45,6 +45,7 @@ mkdocs-autorefs = "*"
 materialx = "*"
 mkdocs-material = "*"
 markdown-include = "*"
+mkdocs-include-markdown-plugin = "*"
 
 
 [tool.poetry.extras]
