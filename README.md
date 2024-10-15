@@ -7,9 +7,7 @@
 [![codecov](https://codecov.io/gh/vempaliakhil96/handy-utils/graph/badge.svg?token=PP3JT1ED3S)](https://codecov.io/gh/vempaliakhil96/handy-utils)
 
 
-
-Skeleton project created by Cookiecutter PyPackage
-
+Simple python package with useful utils.
 
 * Documentation: <https://vempaliakhil96.github.io/handy-utils>
 * GitHub: <https://github.com/vempaliakhil96/handy-utils>
@@ -21,7 +19,3 @@ Skeleton project created by Cookiecutter PyPackage
 
 * LLM based commit message generation
 * Custom LLM client with support proxy url
-
-## Credits
-
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [waynerv/cookiecutter-pypackage](https://github.com/waynerv/cookiecutter-pypackage) project template.
