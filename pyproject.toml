@@ -22,21 +22,28 @@ packages = [
 langchain = "*"
 langchain-openai = "*"
 python = ">=3.10,<4.0"
-click = "8.0.1"
-pyyaml = "6.0.1"
-black  = { version = "^21.5b2", optional = true}
-isort  = { version = "^5.8.0", optional = true}
-flake8  = { version = "^3.9.2", optional = true}
-flake8-docstrings = { version = "^1.6.0", optional = true }
-pytest  = { version = "^6.2.4", optional = true}
-pytest-cov  = { version = "^2.12.0", optional = true}
-tox  = { version = "^3.20.1", optional = true}
-virtualenv  = { version = "^20.2.2", optional = true}
-pip  = { version = "^20.3.1", optional = true}
-twine  = { version = "^3.3.0", optional = true}
-pre-commit = {version = "^2.12.0", optional = true}
-toml = {version = "^0.10.2", optional = true}
-bump2version = {version = "^1.0.1", optional = true}
+click = "*"
+pyyaml = "*"
+black  = "*"
+isort  = "*"
+flake8  = "*"
+flake8-docstrings = "*"
+pytest  = "*"
+pytest-cov  = "*"
+tox  = "*"
+virtualenv  = "*"
+pip  = "*"
+twine  = "*"
+pre-commit = "*"
+toml = "*"
+bump2version = "*"
+mkdocs-material-extensions = "*"
+mkdocs = "*"
+pymdown-extensions = "*"
+mkdocstrings = "*"
+mkdocs-autorefs = "*"
+materialx = "*"
+
 
 [tool.poetry.extras]
 test = [
@@ -50,7 +57,7 @@ test = [
 
 dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
 
-doc = [ "mkdocs", "pymdown-extensions", "mkdocs-material", "mkdocstrings", "mkdocs-autorefs", "materialx"]
+doc = [ "mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings", "mkdocs-autorefs", "materialx"]
 
 [tool.poetry.scripts]
 handy-utils = 'handy_utils.cli:main'
