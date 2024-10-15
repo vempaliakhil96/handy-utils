@@ -46,7 +46,6 @@ markdown_extensions:
       slugify: !!python/name:pymdownx.slugs.uslugify
   - meta
 plugins:
-  - markdown-include
   - search:
       lang: en
   - mkdocstrings:
