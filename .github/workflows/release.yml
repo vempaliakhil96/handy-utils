@@ -52,6 +52,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build wheels and source tarball
         run: >-
