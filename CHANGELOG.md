@@ -2,4 +2,6 @@
 
 ## 0.1.0
 
-* First release on PyPI.
+### Added
+
+- Added generate-commit util to generate commit messages
