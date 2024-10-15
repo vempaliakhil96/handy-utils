@@ -1,8 +1,9 @@
 import os
 from dataclasses import dataclass, field
-from langchain_openai import ChatOpenAI
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
+
+from langchain_openai import ChatOpenAI
 from yaml import Loader, dump, load
 
 
@@ -17,8 +18,10 @@ class Configuration:
     def to_yaml(self) -> str:
         return dump(self.__dict__)
 
+
 def get_config_path() -> Path:
     return Path.home() / ".handy_utils" / "config.yaml"
+
 
 def load_configuration() -> Configuration:
     path = get_config_path()
@@ -26,8 +29,16 @@ def load_configuration() -> Configuration:
         config = load(f, Loader=Loader)
     return Configuration(**config)
 
+
 def load_llm(config: Configuration) -> ChatOpenAI:
-    return ChatOpenAI(model=config.openai_model, **config.model_kwargs, default_headers=config.headers, api_key=config.openai_api_key, base_url=config.base_url)
+    return ChatOpenAI(
+        model=config.openai_model,
+        **config.model_kwargs,
+        default_headers=config.headers,
+        api_key=config.openai_api_key,
+        base_url=config.base_url,
+    )
+
 
 def generate_config():
     path = get_config_path()
@@ -38,10 +49,11 @@ def generate_config():
     else:
         print(f"Config file already exists at {path}")
 
+
 def view_config():
     config = load_configuration()
     return config.to_yaml()
 
+
 def get_openai_api_key() -> str:
     return os.getenv("OPENAI_API_KEY") or "XXX"
-
