@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 """Tests for `handy_utils` package."""
-
-import pytest
 from click.testing import CliRunner
 
 from handy_utils import cli
