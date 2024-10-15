@@ -14,8 +14,10 @@ def generate_commit(dry_run=False):
         "Generate a commit message for the following changes: {changes}"
     )
     chain = prompt | llm
+    if dry_run:
+        print(changes)
     assert changes, "No changes to commit"
-    commit_message = chain.invoke({"changes": changes})
+    commit_message = chain.invoke({"changes": changes}).content
     if dry_run:
         print(commit_message)
     else:

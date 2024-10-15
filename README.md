@@ -19,7 +19,8 @@ Skeleton project created by Cookiecutter PyPackage
 
 ## Features
 
-* TODO
+* LLM based commit message generation
+* Custom LLM client with support proxy url
 
 ## Credits
 
