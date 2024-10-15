@@ -19,3 +19,8 @@ Simple python package with useful utils.
 
 * LLM based commit message generation
 * Custom LLM client with support proxy url
+* Setup automated code coverage reporting
+* Setup automated code quality checks
+* Setup automated deployment to pypi
+* Setup automated documentation deployment
+
