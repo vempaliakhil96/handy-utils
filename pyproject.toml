@@ -40,7 +40,7 @@ bump2version = "*"
 mkdocs-material-extensions = "*"
 mkdocs = "*"
 pymdown-extensions = "*"
-mkdocstrings = "*"
+mkdocstrings-python = "*"
 mkdocs-autorefs = "*"
 materialx = "*"
 mkdocs-material = "*"
@@ -60,7 +60,7 @@ test = [
 
 dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
 
-doc = [ "mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings", "mkdocs-autorefs", "materialx"]
+doc = [ "mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings-python", "mkdocs-autorefs", "materialx"]
 
 [tool.poetry.scripts]
 handy-utils = 'handy_utils.cli:main'
