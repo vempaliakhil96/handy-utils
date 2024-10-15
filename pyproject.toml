@@ -43,6 +43,7 @@ pymdown-extensions = "*"
 mkdocstrings = "*"
 mkdocs-autorefs = "*"
 materialx = "*"
+mkdocs-material = "*"
 
 
 [tool.poetry.extras]
