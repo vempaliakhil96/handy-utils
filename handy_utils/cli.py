@@ -2,7 +2,7 @@
 import click
 
 from handy_utils.configuration import generate_config, get_config_path, view_config
-from handy_utils.generate_commit import generate_commit
+from handy_utils.generate_commit import generate_llm_commit_message, perform_commit
 
 
 @click.group()
@@ -15,7 +15,11 @@ def main():
 @click.option("--dry-run", is_flag=True, help="Dry run the commit generation.")
 def generate_commit_command(dry_run):
     """Generate a commit message for the changes."""
-    generate_commit(dry_run)
+    commit_message = generate_llm_commit_message()
+    click.echo(commit_message)
+    click.pause("Press Enter to continue...")
+    if not dry_run:
+        perform_commit(commit_message)
 
 
 @click.group("config")
