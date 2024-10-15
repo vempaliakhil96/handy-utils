@@ -17,9 +17,14 @@ def generate_commit_command(dry_run):
     """Generate a commit message for the changes."""
     commit_message = generate_llm_commit_message()
     click.echo(commit_message)
-    click.pause("Press Enter to continue...")
-    if not dry_run:
+    k = click.prompt("confirm commit message (y/n) or edit (e)", type=click.Choice(['y', 'n', 'e']))
+    if k == 'y':
         perform_commit(commit_message)
+    elif k == 'e':
+        new_commit_message = click.edit(commit_message)
+        perform_commit(new_commit_message)
+    else:
+        click.echo("Commit not generated.")
 
 
 @click.group("config")
