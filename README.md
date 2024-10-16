@@ -24,3 +24,6 @@ Simple python package with useful utils.
 * Setup automated deployment to pypi
 * Setup automated documentation deployment
 
+## TODOs
+
+* improve documentation generation
