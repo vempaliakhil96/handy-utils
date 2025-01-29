@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "handy-utils-agni"
-version = "0.1.0"
+version = "0.2.0"
 homepage = "https://github.com/vempaliakhil96/handy-utils"
 description = "Handy Utils for daily use"
 authors = ["Akhil Vempali <vempaliakhil96@gmail.com>"]
