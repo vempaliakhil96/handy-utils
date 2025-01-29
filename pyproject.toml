@@ -46,6 +46,9 @@ materialx = "*"
 mkdocs-material = "*"
 markdown-include = "*"
 mkdocs-include-markdown-plugin = "*"
+nbconvert = "^7.16.6"
+pandoc = "^2.4"
+nbformat = "^5.10.4"
 
 
 [tool.poetry.extras]
