@@ -50,6 +50,7 @@ nbconvert = "^7.16.6"
 pandoc = "^2.4"
 nbformat = "^5.10.4"
 atlassian-python-api = "^3.41.19"
+ruff = "^0.9.4"
 
 
 [tool.poetry.extras]
@@ -110,3 +111,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.tox]
 isolated_build = true
+
+[tool.ruff]
+line-length = 120
+ignore = [ "E701", "E702"]
