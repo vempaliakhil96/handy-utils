@@ -17,7 +17,11 @@ class Configuration:
     openai_model: str = "gpt-4o"
     model_kwargs: Dict[str, Any] = None
     headers: Dict[str, str] = None
-
+    confluence_domain: str = None
+    confluence_api_key: str = None
+    confluence_space_key: str = None
+    confluence_username: str = None
+    
     def to_yaml(self) -> str:
         """Convert the configuration to a YAML string."""
         return dump(self.__dict__)
@@ -45,7 +49,6 @@ def load_llm(config: Configuration) -> ChatOpenAI:
         api_key=config.openai_api_key,
         base_url=config.base_url,
     )
-
 
 def generate_config():
     """Generate a configuration file if it doesn't exist."""

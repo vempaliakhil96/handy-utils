@@ -49,6 +49,7 @@ mkdocs-include-markdown-plugin = "*"
 nbconvert = "^7.16.6"
 pandoc = "^2.4"
 nbformat = "^5.10.4"
+atlassian-python-api = "^3.41.19"
 
 
 [tool.poetry.extras]
@@ -67,6 +68,10 @@ doc = [ "mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings
 
 [tool.poetry.scripts]
 handy-utils = 'handy_utils.cli:main'
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.31.0"
+ipykernel = "^6.29.5"
 
 [tool.black]
 line-length = 120
