@@ -19,6 +19,7 @@ exporter = HTMLExporter(config=c)
 exporter.register_preprocessor(TagRemovePreprocessor(config=c), True)
 
 def upload_to_confluence(output_path: str) -> str:
+    
     with open(output_path) as f: text = f.read()
 
     confluence = Confluence(url=f'https://{config.confluence_domain}/', 
@@ -60,6 +61,6 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
     
     with open(output_path, "w") as f: f.write(output[0])
 
-    if not dry_run: upload_to_confluence(notebook_path, output_path)
+    if not dry_run: upload_to_confluence(output_path)
     
     return output_path
