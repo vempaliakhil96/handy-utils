@@ -70,6 +70,6 @@ config_group.add_command(generate_config_command)
 config_group.add_command(view_config_command)
 config_group.add_command(view_config_path_command)
 main.add_command(config_group)
-main.add_command(convert_to_markdown_command)
+main.add_command(convert_to_confluence_command)
 if __name__ == "__main__":
     main()  # pragma: no cover
