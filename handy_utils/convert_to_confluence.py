@@ -35,7 +35,7 @@ def upload_to_confluence(output_path: str) -> str:
         body=text,
         type='page',
         representation='storage',
-        full_width=True,
+        full_width=False,
         editor='v2'
     )
 
