@@ -5,6 +5,7 @@ import nbformat
 from pathlib import Path
 from atlassian import Confluence
 from handy_utils.configuration import load_configuration
+import tempfile
 
 config = load_configuration()
 
@@ -43,7 +44,7 @@ def upload_to_confluence(output_path: str) -> str:
 
 def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = False) -> str:
     notebook_path = Path(notebook_path)
-    output_path = Path(output_path)
+    output_path = Path(output_path) if output_path else None
 
     with open(notebook_path) as f:
         nb = nbformat.read(f, as_version=4)
@@ -57,9 +58,12 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
 
     output = exporter.from_notebook_node(nb)
     
-    if output_path.is_dir(): output_path = output_path / notebook_path.name.replace('.ipynb', '.html')
+    if output_path and output_path.is_dir(): output_path = output_path / notebook_path.name.replace('.ipynb', '.html')
     
-    with open(output_path, "w") as f: f.write(output[0])
+    if output_path:
+        with open(output_path, "w") as f: f.write(output[0])
+    else:
+        output_path = Path(tempfile.mktemp()) / notebook_path.name.replace('.ipynb', '.html')
 
     if not dry_run: upload_to_confluence(output_path)
     

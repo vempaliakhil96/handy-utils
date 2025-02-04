@@ -28,9 +28,9 @@ def generate_commit_command(dry_run):
 
 
 @click.command("nb2conf")
-@click.option("--notebook-path", type=click.Path(exists=True), help="Path to the notebook to convert.")
-@click.option("--output-path", type=click.Path(), help="Path to the output html file.")
-@click.option("--dry-run", is_flag=True, help="Dry run the conversion.")
+@click.argument("notebook_path", type=click.Path(exists=True))
+@click.option("--output-path", type=click.Path(), help="Path to the output html file.", default=None)
+@click.option("--dry-run", is_flag=True, help="Dry run the conversion.", default=False)
 def convert_to_confluence_command(notebook_path: str, output_path: str, dry_run: bool):
     """
     Convert a notebook to Confluence. You can add the following tags at the start of each cell to control the conversion: \b
