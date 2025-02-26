@@ -31,6 +31,8 @@ def upload_to_confluence(output_path: str) -> str:
     
     with open(output_path) as f: text = f.read()
 
+    page_name = output_path.name.replace('.html', '').replace('_', ' ').replace('-', ' ').replace('.', ' ').title()
+
     confluence = Confluence(url=f'https://{config.confluence_domain}/', 
                         cloud=True, 
                         username=config.confluence_username, 
@@ -41,14 +43,14 @@ def upload_to_confluence(output_path: str) -> str:
     # Try to find existing page first
     existing_page = confluence.get_page_by_title(
         space=config.confluence_space_key,
-        title=output_path.name
+        title=page_name
     )
 
     if existing_page:
         # Update existing page
         confluence.update_page(
             page_id=existing_page['id'],
-            title=output_path.name,
+            title=page_name,
             body=text,
             type='page',
             representation='storage',
@@ -58,7 +60,7 @@ def upload_to_confluence(output_path: str) -> str:
         # Create new page
         confluence.create_page(
             space=config.confluence_space_key,
-            title=output_path.name,
+            title=page_name,
             body=text,
             type='page',
             representation='storage',
@@ -89,8 +91,9 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
     if output_path:
         with open(output_path, "w") as f: f.write(output[0])
     else:
-        output_path = Path(tempfile.mktemp()) / notebook_path.name.replace('.ipynb', '.html')
-
+        tmp_dir = Path(tempfile.mkdtemp())
+        output_path = tmp_dir / notebook_path.name.replace('.ipynb', '.html')
+        with open(output_path, "w") as f: f.write(output[0])
     if not dry_run: upload_to_confluence(output_path)
     
     return output_path
