@@ -6,10 +6,18 @@ from pathlib import Path
 from atlassian import Confluence
 from handy_utils.configuration import load_configuration
 import tempfile
+import os
 
 config = load_configuration()
 
 c = Config()
+
+# Configure the exporter to use our custom template
+template_path = os.path.join(os.path.dirname(__file__), 'templates')
+c.HTMLExporter.extra_template_paths = [template_path]
+c.HTMLExporter.template_file = 'atlassian_template.tpl'
+c.HTMLExporter.exclude_input_prompt = True
+c.HTMLExporter.exclude_output_prompt = True
 
 c.TagRemovePreprocessor.remove_cell_tags = ("remove_cell", "skip")
 c.TagRemovePreprocessor.remove_all_outputs_tags = ("remove_output",)
@@ -30,15 +38,33 @@ def upload_to_confluence(output_path: str) -> str:
     
     print(f'Uploading {output_path} to Confluence')
 
-    confluence.create_page(
+    # Try to find existing page first
+    existing_page = confluence.get_page_by_title(
         space=config.confluence_space_key,
-        title=output_path.name,
-        body=text,
-        type='page',
-        representation='storage',
-        full_width=False,
-        editor='v2'
+        title=output_path.name
     )
+
+    if existing_page:
+        # Update existing page
+        confluence.update_page(
+            page_id=existing_page['id'],
+            title=output_path.name,
+            body=text,
+            type='page',
+            representation='storage',
+            full_width=False,
+        )
+    else:
+        # Create new page
+        confluence.create_page(
+            space=config.confluence_space_key,
+            title=output_path.name,
+            body=text,
+            type='page',
+            representation='storage',
+            full_width=False,
+            editor='v2'
+        )
 
     print(f'Uploaded {output_path} to Confluence')
 
