@@ -1,0 +1,30 @@
+{% extends "null.j2" %}
+
+{# Markdown cell template. #}
+{% block markdowncell %}
+{{ cell.source | markdown2html | html_to_asf }}
+{% endblock markdowncell %}
+
+
+{# Format code cells as Python code blocks #}
+{% block input %}
+<ac:structured-macro ac:name="code">
+    <ac:parameter ac:name="language">python</ac:parameter>
+    <ac:plain-text-body><![CDATA[{{ cell.source }}]]></ac:plain-text-body>
+</ac:structured-macro>
+{% endblock input %}
+
+{# Stream output ans stream error #}
+{% block stream_error %}
+<ac:structured-macro ac:name="code">
+    <ac:parameter ac:name="language"></ac:parameter>
+    <ac:plain-text-body><![CDATA[{{ output.text }}]]></ac:plain-text-body>
+</ac:structured-macro>
+{% endblock stream_error %}
+
+{% block stream_stdout %}
+<ac:structured-macro ac:name="code">
+    <ac:parameter ac:name="language"></ac:parameter>
+    <ac:plain-text-body><![CDATA[{{ output.text }}]]></ac:plain-text-body>
+</ac:structured-macro>
+{% endblock stream_stdout %}

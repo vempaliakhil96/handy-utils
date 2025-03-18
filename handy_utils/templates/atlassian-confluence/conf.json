@@ -1,0 +1,8 @@
+{
+    "base_template": "classic",
+    "mimetypes": {
+      "text/html": true,
+      "text/markdown": true
+    },
+    "preprocessors": {}
+  }

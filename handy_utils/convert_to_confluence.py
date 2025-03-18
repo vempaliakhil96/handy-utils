@@ -1,23 +1,27 @@
-from traitlets.config import Config
-from nbconvert.exporters import HTMLExporter
-from nbconvert.preprocessors import TagRemovePreprocessor
+import os
+import tempfile
+import re
 import nbformat
 from pathlib import Path
 from atlassian import Confluence
+from handy_utils.html_to_asf import convert_html_str_to_asf
+from traitlets.config import Config
+from nbconvert.exporters import HTMLExporter
+from nbconvert.preprocessors import TagRemovePreprocessor
 from handy_utils.configuration import load_configuration
-import tempfile
-import os
 
 config = load_configuration()
 
 c = Config()
+    
 
 # Configure the exporter to use our custom template
 template_path = os.path.join(os.path.dirname(__file__), 'templates')
-c.HTMLExporter.extra_template_paths = [template_path]
-c.HTMLExporter.template_file = 'atlassian_template.tpl'
+c.HTMLExporter.extra_template_basedirs = [template_path]
 c.HTMLExporter.exclude_input_prompt = True
 c.HTMLExporter.exclude_output_prompt = True
+c.HTMLExporter.template_name = 'atlassian-confluence'
+c.HTMLExporter.filters = {'html_to_asf': convert_html_str_to_asf}
 
 c.TagRemovePreprocessor.remove_cell_tags = ("remove_cell", "skip")
 c.TagRemovePreprocessor.remove_all_outputs_tags = ("remove_output",)
@@ -27,11 +31,12 @@ c.TagRemovePreprocessor.enabled = True
 exporter = HTMLExporter(config=c)
 exporter.register_preprocessor(TagRemovePreprocessor(config=c), True)
 
-def upload_to_confluence(output_path: str) -> str:
+def upload_to_confluence(output_path: str, page_name: str = None) -> str:
     
     with open(output_path) as f: text = f.read()
 
-    page_name = output_path.name.replace('.html', '').replace('_', ' ').replace('-', ' ').replace('.', ' ').title()
+    print(page_name)
+    if not page_name:  page_name = output_path.name.replace('.html', '').replace('_', ' ').replace('-', ' ').replace('.', ' ').title()
 
     confluence = Confluence(url=f'https://{config.confluence_domain}/', 
                         cloud=True, 
@@ -54,7 +59,7 @@ def upload_to_confluence(output_path: str) -> str:
             body=text,
             type='page',
             representation='storage',
-            full_width=False,
+            full_width=True,
         )
     else:
         # Create new page
@@ -64,7 +69,7 @@ def upload_to_confluence(output_path: str) -> str:
             body=text,
             type='page',
             representation='storage',
-            full_width=False,
+            full_width=True,
             editor='v2'
         )
 
@@ -77,7 +82,11 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
     with open(notebook_path) as f:
         nb = nbformat.read(f, as_version=4)
     
+    page_name = None
+
     for cell in nb.cells:
+        if cell.cell_type == 'markdown' and page_name is None:
+            page_name = re.sub(r'[^a-zA-Z0-9\s]', '', cell.source.split('\n')[0]).strip()
         if cell.source.startswith("#|nb_tag:"):
             c = cell.source.split('\n')[0]; cell.source = cell.source.replace(c, '').strip()
             tag_name = c.replace('#|nb_tag:', '').strip()
@@ -94,6 +103,10 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
         tmp_dir = Path(tempfile.mkdtemp())
         output_path = tmp_dir / notebook_path.name.replace('.ipynb', '.html')
         with open(output_path, "w") as f: f.write(output[0])
-    if not dry_run: upload_to_confluence(output_path)
+
+    if not dry_run: upload_to_confluence(output_path, page_name)
     
     return output_path
+
+if __name__ == '__main__':
+    convert_to_confluence('/Users/avempali/Documents/repos/devai-issue-scoping/notebooks/avempali-22-vertical-agent-analysis.ipynb', '/Users/avempali/Downloads', dry_run=True)
