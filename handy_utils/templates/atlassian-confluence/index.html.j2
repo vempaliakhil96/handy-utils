@@ -28,3 +28,9 @@
     <ac:plain-text-body><![CDATA[{{ output.text }}]]></ac:plain-text-body>
 </ac:structured-macro>
 {% endblock stream_stdout %}
+
+{% block display_data %}
+{% if output.data['text/html'] %}
+{{ output.data['text/html']}}
+{% endif %}
+{% endblock display_data %}
