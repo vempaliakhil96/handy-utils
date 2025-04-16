@@ -17,16 +17,16 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 14. Types other than feat and fix MAY be used in your commit messages, e.g., docs: update ref docs.
 15. The units of information that make up Conventional Commits MUST NOT be treated as case sensitive by implementors, with the exception of BREAKING CHANGE which MUST be uppercase.
 16. BREAKING-CHANGE MUST be synonymous with BREAKING CHANGE, when used as a token in a footer.
-"""
+"""  # noqa: E501
 
 PROMPT = """
-You are a git commit message generator. Generate a commit message for the changes given below. 
-Note that the changes should follow the conventional commits specification. 
-Changes: 
+You are a git commit message generator. Generate a commit message for the changes given below.
+Note that the changes should follow the conventional commits specification.
+Changes:
 ```diff
 {changes}
 ```
-Conventional commits specification: 
+Conventional commits specification:
 {conventional_commit_spec}
 
 {format_instructions}

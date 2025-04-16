@@ -20,10 +20,5 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.5
     hooks:
-      - id: ruff
       - id: ruff-format
-  - repo: https://github.com/pycqa/flake8
-    rev: 3.9.2
-    hooks:
-      - id: flake8
-        additional_dependencies: [ flake8-typing-imports==1.10.0 ]
+      - id: ruff

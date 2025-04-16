@@ -73,6 +73,8 @@ dev = [
     "ipython>=8.31.0,<9",
     "ipykernel>=6.29.5,<7",
     "isort>=5.13.2",
+    "pre-commit>=4.2.0",
+    "ruff>=0.9.10",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -90,11 +92,9 @@ build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 120
-select = ["E", "W", "F"]
-ignore = [ "E701", "E702"]
 
 [tool.ruff.lint]
-extend-select = ["E", "W", "F"]
+select = ["E", "W", "F"]
 ignore = [ "E701", "E702"]
 
 [tool.isort]

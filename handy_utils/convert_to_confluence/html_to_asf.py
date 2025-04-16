@@ -92,7 +92,7 @@ def html_to_asf(el: Union[BeautifulSoup, NavigableString, Tag, str], ctx: Option
             return ""
         if href.startswith("http"):
             return f'<a href="{href}">{inner}</a>'
-        return f'<ac:link><ri:page ri:content-title="{href}"/><ac:plain-text-link-body><![CDATA[{inner}]]></ac:plain-text-link-body></ac:link>'
+        return f'<ac:link><ri:page ri:content-title="{href}"/><ac:plain-text-link-body><![CDATA[{inner}]]></ac:plain-text-link-body></ac:link>'  # noqa: E501
 
     elif tag == "img":
         src = cast(str, attrs.get("src", ""))

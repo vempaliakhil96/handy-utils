@@ -15,17 +15,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install uv
       run: |
         curl -LsSf https://astral.sh/uv/install.sh | sh
         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-    
+
     - name: Setup uv cache
       uses: actions/cache@v4
       with:
@@ -35,16 +35,16 @@ jobs:
         key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml') }}
         restore-keys: |
           ${{ runner.os }}-uv-
-    
+
     - name: Install deps
       run: |
         uv sync
         uv pip install -e ".[test]"
-        
+
     - name: Run tests
       run: |
         uv run pytest --cov=./ --cov-report=xml
-        
+
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
