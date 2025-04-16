@@ -43,8 +43,8 @@ def generate_commit_command(jira_ticket: str, dry_run: bool, no_prompt: bool):
 @click.option("--dry-run", is_flag=True, help="Dry run the conversion.", default=False)
 def convert_to_confluence_command(notebook_path: str, output_path: str, dry_run: bool):
     """
-    Convert a notebook to Confluence. You can add the following tags at the start of each cell to control the conversion: \b
-
+    Convert a notebook to Confluence. You can add the following tags at the start of each cell
+    to control the conversion: \n
     - `#|nb_tag: skip` - skip the cell \n
     - `#|nb_tag: remove_output` - remove the output of the cell \n
     - `#|nb_tag: remove_input` - remove the input of the cell \n
