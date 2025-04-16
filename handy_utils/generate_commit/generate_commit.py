@@ -28,7 +28,7 @@ def generate_llm_commit_message(jira_ticket: str|None = None) -> str:
     prompt_tpl = PromptTemplate.from_template(template=prompt, partial_variables={"format_instructions": output_parser.get_format_instructions()})
     chain = prompt_tpl | llm | output_parser
     assert changes, "No changes to commit"
-    commit_message = chain.invoke({"changes": changes, "jira_ticket": jira_ticket, "conventional_commit_spec": CONVENTIONAL_COMMIT_SPEC}).content
+    commit_message = chain.invoke({"changes": changes, "jira_ticket": jira_ticket, "conventional_commit_spec": CONVENTIONAL_COMMIT_SPEC})
     assert isinstance(commit_message, dict), "Commit message is not a dictionary"
     commit_message_object = ConventionalCommitMessage(**commit_message)
     return build_commit_message(commit_message_object, jira_ticket)
