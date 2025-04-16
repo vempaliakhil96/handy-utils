@@ -38,6 +38,7 @@ jobs:
     
     - name: Install deps
       run: |
+        uv sync
         uv pip install -e ".[test]"
         
     - name: Run tests
