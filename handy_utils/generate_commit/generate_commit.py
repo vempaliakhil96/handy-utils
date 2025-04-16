@@ -59,8 +59,8 @@ def perform_commit(commit_message):
 
 def build_commit_message(commit_message_object: ConventionalCommitMessage, jira_ticket: str | None = None) -> str:
     """Build the commit message."""
-    scope = f"[{jira_ticket}]" if jira_ticket else ""
-    commit_message_tpl = "{type} {scope}: {description}{body}{footer}"
+    scope = f"({jira_ticket})" if jira_ticket else ""
+    commit_message_tpl = "{type}{scope}: {description}\n{body}\n\n{footer}"
     return commit_message_tpl.format(
         type=commit_message_object.type,
         scope=scope,
