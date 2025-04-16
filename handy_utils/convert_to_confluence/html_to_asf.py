@@ -1,7 +1,8 @@
-from bs4 import BeautifulSoup, NavigableString
-from typing import Union, Dict, Optional
+from bs4 import BeautifulSoup
+from bs4.element import NavigableString, Tag
+from typing import Union, Dict, Optional, cast
 
-def html_to_asf(el: Union[BeautifulSoup, NavigableString, str], 
+def html_to_asf(el: Union[BeautifulSoup, NavigableString, Tag, str], 
                 ctx: Optional[Dict] = None) -> str:
     """Convert HTML (bs4) element to Atlassian Storage Format `el`"""
     if ctx is None: ctx = {}
@@ -11,18 +12,20 @@ def html_to_asf(el: Union[BeautifulSoup, NavigableString, str],
         return str(el)
     
     # Get tag name and attributes
-    tag = el.name
-    attrs = el.attrs if hasattr(el, 'attrs') else {}
+    tag = el.name if isinstance(el, (Tag, BeautifulSoup)) else None
+    attrs = el.attrs if isinstance(el, (Tag, BeautifulSoup)) else {}
     
     # Process children first
-    inner = ''.join(html_to_asf(c, ctx) for c in el.children) if hasattr(el, 'children') else ''
+    inner = ''.join(html_to_asf(cast(Union[BeautifulSoup, NavigableString, Tag, str], c), ctx) 
+                    for c in el.children) if hasattr(el, 'children') else ''
     
     # Handle different HTML elements
     if tag is None:
         return inner
         
     elif tag == 'p':
-        align = attrs.get('style', '').replace('text-align: ', '') if 'style' in attrs else ''
+        style = cast(str, attrs.get('style', ''))
+        align = style.replace('text-align: ', '') if 'style' in attrs else ''
         if align in ('center', 'right'):
             return f'<p style="text-align: {align}">{inner}</p>'
         return f'<p>{inner}</p>'
@@ -79,18 +82,18 @@ def html_to_asf(el: Union[BeautifulSoup, NavigableString, str],
         return f'<li>{inner}</li>'
         
     elif tag == 'a':
-        href = attrs.get('href', '')
+        href = cast(str, attrs.get('href', ''))
         if inner=='¶': return ''
         if href.startswith('http'): return f'<a href="{href}">{inner}</a>'
         return f'<ac:link><ri:page ri:content-title="{href}"/><ac:plain-text-link-body><![CDATA[{inner}]]></ac:plain-text-link-body></ac:link>'
         
     elif tag == 'img':
-        src = attrs.get('src', '')
+        src = cast(str, attrs.get('src', ''))
         if src.startswith('http'): return f'<ac:image><ri:url ri:value="{src}"/></ac:image>'
         return f'<ac:image><ri:attachment ri:filename="{src}"/></ac:image>'
         
     elif tag == 'span':
-        style = attrs.get('style', '')
+        style = cast(str, attrs.get('style', ''))
         if 'color:' in style:
             color = style.split('color:')[1].split(';')[0].strip()
             return f'<span style="color: {color}">{inner}</span>'

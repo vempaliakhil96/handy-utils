@@ -4,7 +4,7 @@ import re
 import nbformat
 from pathlib import Path
 from atlassian import Confluence  # type: ignore
-from handy_utils.html_to_asf import convert_html_str_to_asf
+from handy_utils.convert_to_confluence.html_to_asf import convert_html_str_to_asf
 from traitlets.config import Config
 from nbconvert.exporters import HTMLExporter
 from nbconvert.preprocessors import TagRemovePreprocessor
