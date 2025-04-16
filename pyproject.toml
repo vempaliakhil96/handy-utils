@@ -1,78 +1,84 @@
-[tool]
-[tool.poetry]
+[project]
 name = "handy-utils-agni"
 version = "0.2.0"
-homepage = "https://github.com/vempaliakhil96/handy-utils"
 description = "Handy Utils for daily use"
-authors = ["Akhil Vempali <vempaliakhil96@gmail.com>"]
+authors = [{ name = "Akhil Vempali", email = "vempaliakhil96@gmail.com" }]
+requires-python = ">=3.10,<4.0"
 readme = "README.md"
-license =  "MIT"
-classifiers=[
-    'Development Status :: 2 - Pre-Alpha',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: MIT License',
-    'Natural Language :: English',
+license = "MIT"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
 ]
-packages = [
-    { include = "handy_utils" },
-    { include = "tests", format = "sdist" },
+dependencies = [
+    "langchain",
+    "langchain-openai",
+    "click",
+    "pyyaml",
+    "pymdown-extensions",
+    "markdown-include",
+    "mkdocs-include-markdown-plugin",
+    "nbconvert>=7.16.6,<8",
+    "pandoc~=2.4",
+    "nbformat>=5.10.4,<6",
+    "atlassian-python-api>=3.41.19,<4",
+    "ruff>=0.9.4,<0.10",
 ]
 
-[tool.poetry.dependencies]
-langchain = "*"
-langchain-openai = "*"
-python = ">=3.10,<4.0"
-click = "*"
-pyyaml = "*"
-black  = "*"
-isort  = "*"
-flake8  = "*"
-flake8-docstrings = "*"
-pytest  = "*"
-pytest-cov  = "*"
-tox  = "*"
-virtualenv  = "*"
-pip  = "*"
-twine  = "*"
-pre-commit = "*"
-toml = "*"
-bump2version = "*"
-mkdocs-material-extensions = "*"
-mkdocs = "*"
-pymdown-extensions = "*"
-mkdocstrings-python = "*"
-mkdocs-autorefs = "*"
-materialx = "*"
-mkdocs-material = "*"
-markdown-include = "*"
-mkdocs-include-markdown-plugin = "*"
-nbconvert = "^7.16.6"
-pandoc = "^2.4"
-nbformat = "^5.10.4"
-atlassian-python-api = "^3.41.19"
-ruff = "^0.9.4"
-
-
-[tool.poetry.extras]
+[project.optional-dependencies]
 test = [
     "pytest",
     "black",
     "isort",
     "flake8",
     "flake8-docstrings",
-    "pytest-cov"
-    ]
+    "pytest-cov",
+]
+dev = [
+    "tox",
+    "pre-commit",
+    "virtualenv",
+    "pip",
+    "twine",
+    "toml",
+    "bump2version",
+]
+doc = [
+    "mkdocs",
+    "mkdocs-material-extensions",
+    "mkdocs-material",
+    "mkdocstrings-python",
+    "mkdocs-autorefs",
+    "materialx",
+]
 
-dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
+[project.urls]
+Homepage = "https://github.com/vempaliakhil96/handy-utils"
 
-doc = [ "mkdocs", "mkdocs-material-extensions", "mkdocs-material", "mkdocstrings-python", "mkdocs-autorefs", "materialx"]
+[project.scripts]
+handy-utils = "handy_utils.cli:main"
 
-[tool.poetry.scripts]
-handy-utils = 'handy_utils.cli:main'
+[dependency-groups]
+dev = [
+    "ipython>=8.31.0,<9",
+    "ipykernel>=6.29.5,<7",
+    "isort>=5.13.2",
+]
 
-[tool.poetry.group.dev.dependencies]
-ipython = "^8.31.0"
-ipykernel = "^6.29.5"
+[tool.hatch.build.targets.sdist]
+include = [
+    "handy_utils",
+    "tests",
+]
+
+[tool.hatch.build.targets.wheel]
+include = ["handy_utils"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 120
@@ -102,12 +108,6 @@ use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 120
 skip_gitignore = true
-# you can skip files as below
-#skip_glob = docs/conf.py
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.tox]
 isolated_build = true
