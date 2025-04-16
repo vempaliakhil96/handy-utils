@@ -26,6 +26,7 @@ dependencies = [
     "nbformat>=5.10.4,<6",
     "atlassian-python-api>=3.41.19,<4",
     "ruff>=0.9.4,<0.10",
+    "types-pyyaml>=6.0.12.20250402",
 ]
 
 [project.optional-dependencies]
@@ -36,6 +37,7 @@ test = [
     "flake8",
     "flake8-docstrings",
     "pytest-cov",
+    "types-PyYAML",
 ]
 dev = [
     "tox",

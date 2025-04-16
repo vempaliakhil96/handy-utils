@@ -1,11 +1,11 @@
 """Configuration for the Handy Utils CLI."""
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict
 
 from langchain_openai import ChatOpenAI
-from yaml import Loader, dump, load
+from yaml import Loader, dump, load  # type: ignore
 
 
 @dataclass
@@ -15,13 +15,13 @@ class Configuration:
     openai_api_key: str
     base_url: str = "https://api.openai.com/v1"
     openai_model: str = "gpt-4o"
-    model_kwargs: Dict[str, Any] = None
-    headers: Dict[str, str] = None
-    confluence_domain: str = None
-    confluence_api_key: str = None
-    confluence_space_key: str = None
-    confluence_username: str = None
-    
+    model_kwargs: Dict[str, Any] = field(default_factory=dict)
+    headers: Dict[str, str] = field(default_factory=dict)
+    confluence_domain: str = ""
+    confluence_api_key: str = ""
+    confluence_space_key: str = ""
+    confluence_username: str = ""
+
     def to_yaml(self) -> str:
         """Convert the configuration to a YAML string."""
         return dump(self.__dict__)
@@ -35,6 +35,8 @@ def get_config_path() -> Path:
 def load_configuration() -> Configuration:
     """Load the configuration from the file."""
     path = get_config_path()
+    if not path.exists():
+        return Configuration(openai_api_key=get_openai_api_key())
     with open(path, "r") as f:
         config = load(f, Loader=Loader)
     return Configuration(**config)
@@ -46,7 +48,7 @@ def load_llm(config: Configuration) -> ChatOpenAI:
         model=config.openai_model,
         **config.model_kwargs,
         default_headers=config.headers,
-        api_key=config.openai_api_key,
+        api_key=config.openai_api_key,  # type: ignore
         base_url=config.base_url,
     )
 
