@@ -59,7 +59,7 @@ def upload_to_confluence(output_path: str, page_name: str = None) -> str:
             body=text,
             type='page',
             representation='storage',
-            full_width=True,
+            full_width=False,
         )
     else:
         # Create new page
@@ -69,7 +69,7 @@ def upload_to_confluence(output_path: str, page_name: str = None) -> str:
             body=text,
             type='page',
             representation='storage',
-            full_width=True,
+            full_width=False,
             editor='v2'
         )
 
