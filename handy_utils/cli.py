@@ -1,9 +1,11 @@
 """Console script for handy_utils."""
+
 import click
 
 from handy_utils.configuration import generate_config, get_config_path, view_config
-from handy_utils.generate_commit import generate_llm_commit_message, perform_commit
 from handy_utils.convert_to_confluence import convert_to_confluence
+from handy_utils.generate_commit import generate_llm_commit_message, perform_commit
+
 
 @click.group("handy-utils")
 def main():
@@ -25,10 +27,10 @@ def generate_commit_command(jira_ticket: str, dry_run: bool, no_prompt: bool):
     if no_prompt:
         perform_commit(commit_message)
         return
-    k = click.prompt("confirm commit message (y/n) or edit (e)", type=click.Choice(['y', 'n', 'e']))
-    if k == 'y':
+    k = click.prompt("confirm commit message (y/n) or edit (e)", type=click.Choice(["y", "n", "e"]))
+    if k == "y":
         perform_commit(commit_message)
-    elif k == 'e':
+    elif k == "e":
         new_commit_message = click.edit(commit_message)
         perform_commit(new_commit_message)
     else:
@@ -48,6 +50,7 @@ def convert_to_confluence_command(notebook_path: str, output_path: str, dry_run:
     - `#|nb_tag: remove_input` - remove the input of the cell \n
     """
     convert_to_confluence(notebook_path, output_path, dry_run)
+
 
 @click.group("config")
 def config_group():

@@ -1,4 +1,5 @@
 """Configuration for the Handy Utils CLI."""
+
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -51,6 +52,7 @@ def load_llm(config: Configuration) -> ChatOpenAI:
         api_key=config.openai_api_key,  # type: ignore
         base_url=config.base_url,
     )
+
 
 def generate_config():
     """Generate a configuration file if it doesn't exist."""

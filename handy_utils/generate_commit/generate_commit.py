@@ -2,10 +2,11 @@
 
 import subprocess
 
-from langchain_core.runnables import Runnable
-from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.runnables import Runnable
 from pydantic import BaseModel, Field
+
 from handy_utils.configuration import load_configuration, load_llm
 from handy_utils.generate_commit.prompts import CONVENTIONAL_COMMIT_SPEC, PROMPT
 
