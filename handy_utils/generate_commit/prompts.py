@@ -29,8 +29,5 @@ Changes:
 Conventional commits specification: 
 {conventional_commit_spec}
 
-REMEMBER: Only give the commit message, no other text. i.e you should NOT format the commit message in markdown or any other language.
-"""
-
-ADDITIONAL_JIRA_TICKET_PROMPT = """Here is the additional information for the Jira ticket: {jira_ticket}. Incorporate this information into the commit message as part of the scope.
+{format_instructions}
 """
