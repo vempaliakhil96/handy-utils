@@ -3,7 +3,7 @@
 
 [![pypi](https://img.shields.io/pypi/v/handy-utils.svg)](https://pypi.org/project/handy-utils/)
 [![python](https://img.shields.io/pypi/pyversions/handy-utils.svg)](https://pypi.org/project/handy-utils/)
-[![Build Status](https://github.com/vempaliakhil96/handy-utils/actions/workflows/dev.yml/badge.svg)](https://github.com/vempaliakhil96/handy-utils/actions/workflows/dev.yml)
+[![Tests](https://github.com/vempaliakhil96/handy-utils/actions/workflows/tests.yml/badge.svg)](https://github.com/vempaliakhil96/handy-utils/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/vempaliakhil96/handy-utils/graph/badge.svg?token=PP3JT1ED3S)](https://codecov.io/gh/vempaliakhil96/handy-utils)
 
 
