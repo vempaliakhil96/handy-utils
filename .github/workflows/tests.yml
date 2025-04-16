@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v4
@@ -32,17 +32,17 @@ jobs:
         path: |
           ~/.cache/uv
           ~/.uv
-        key: ${{ runner.os }}-uv-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml') }}
         restore-keys: |
           ${{ runner.os }}-uv-
     
     - name: Install deps
       run: |
-        uv sync
+        uv pip install -e ".[test]"
         
     - name: Run tests
       run: |
-        uvx pytest --cov=./ --cov-report=xml
+        uv run pytest --cov=./ --cov-report=xml
         
     - name: Upload coverage
       uses: codecov/codecov-action@v3
