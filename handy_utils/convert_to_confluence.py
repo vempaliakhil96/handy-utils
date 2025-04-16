@@ -3,7 +3,7 @@ import tempfile
 import re
 import nbformat
 from pathlib import Path
-from atlassian import Confluence
+from atlassian import Confluence  # type: ignore
 from handy_utils.html_to_asf import convert_html_str_to_asf
 from traitlets.config import Config
 from nbconvert.exporters import HTMLExporter
@@ -31,12 +31,14 @@ c.TagRemovePreprocessor.enabled = True
 exporter = HTMLExporter(config=c)
 exporter.register_preprocessor(TagRemovePreprocessor(config=c), True)
 
-def upload_to_confluence(output_path: str, page_name: str = None) -> str:
+def upload_to_confluence(output_path: Path | str, page_name: str | None = None) -> str:
     
     with open(output_path) as f: text = f.read()
 
     print(page_name)
-    if not page_name:  page_name = output_path.name.replace('.html', '').replace('_', ' ').replace('-', ' ').replace('.', ' ').title()
+    if not page_name:
+        path = Path(output_path) if isinstance(output_path, str) else output_path
+        page_name = path.stem.replace('_', ' ').replace('-', ' ').replace('.', ' ').title()
 
     confluence = Confluence(url=f'https://{config.confluence_domain}/', 
                         cloud=True, 
@@ -50,10 +52,12 @@ def upload_to_confluence(output_path: str, page_name: str = None) -> str:
         space=config.confluence_space_key,
         title=page_name
     )
+    assert isinstance(existing_page, dict)
+    assert 'id' in existing_page
 
     if existing_page:
         # Update existing page
-        confluence.update_page(
+        page = confluence.update_page(
             page_id=existing_page['id'],
             title=page_name,
             body=text,
@@ -63,7 +67,7 @@ def upload_to_confluence(output_path: str, page_name: str = None) -> str:
         )
     else:
         # Create new page
-        confluence.create_page(
+        page = confluence.create_page(
             space=config.confluence_space_key,
             title=page_name,
             body=text,
@@ -72,10 +76,12 @@ def upload_to_confluence(output_path: str, page_name: str = None) -> str:
             full_width=False,
             editor='v2'
         )
-
+    assert isinstance(page, dict)
+    assert 'id' in page
     print(f'Uploaded {output_path} to Confluence')
+    return f'https://{config.confluence_domain}/wiki/spaces/{config.confluence_space_key}/pages/{page["id"]}'
 
-def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = False) -> str:
+def convert_to_confluence(notebook_path: str | Path, output_path: str | Path | None = None, dry_run: bool = False) -> str | Path | None:
     notebook_path = Path(notebook_path)
     output_path = Path(output_path) if output_path else None
 
@@ -107,6 +113,3 @@ def convert_to_confluence(notebook_path: str, output_path: str, dry_run: bool = 
     if not dry_run: upload_to_confluence(output_path, page_name)
     
     return output_path
-
-if __name__ == '__main__':
-    convert_to_confluence('/Users/avempali/Documents/repos/devai-issue-scoping/notebooks/avempali-22-vertical-agent-analysis.ipynb', '/Users/avempali/Downloads', dry_run=True)
