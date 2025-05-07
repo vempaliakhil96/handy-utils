@@ -5,6 +5,7 @@ import click
 from handy_utils.configuration import generate_config, get_config_path, view_config
 from handy_utils.convert_to_confluence import convert_to_confluence
 from handy_utils.generate_commit import generate_llm_commit_message, perform_commit
+from handy_utils.obsidian_sync import sync_git_repo
 
 
 @click.group("handy-utils")
@@ -52,6 +53,14 @@ def convert_to_confluence_command(notebook_path: str, output_path: str, dry_run:
     convert_to_confluence(notebook_path, output_path, dry_run)
 
 
+@click.command("sync-git-repo")
+@click.argument("repo_path", type=click.Path(exists=True))
+@click.option("--commit-msg", type=str, help="Commit message.")
+def sync_git_repo_command(repo_path: str, commit_msg: str):
+    """Sync a git repository."""
+    return sync_git_repo(repo_path, commit_msg)
+
+
 @click.group("config")
 def config_group():
     """Configuration commands."""
@@ -80,6 +89,7 @@ main.add_command(generate_commit_command)
 config_group.add_command(generate_config_command)
 config_group.add_command(view_config_command)
 config_group.add_command(view_config_path_command)
+main.add_command(sync_git_repo_command)
 main.add_command(config_group)
 main.add_command(convert_to_confluence_command)
 if __name__ == "__main__":
