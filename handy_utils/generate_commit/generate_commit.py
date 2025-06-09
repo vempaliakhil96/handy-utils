@@ -30,22 +30,29 @@ def create_llm_chain() -> Runnable:
     output_parser = JsonOutputParser(pydantic_object=ConventionalCommitMessage)
     prompt_tpl = PromptTemplate.from_template(
         template=PROMPT,
-        partial_variables={"format_instructions": output_parser.get_format_instructions()},
+        partial_variables={
+            "format_instructions": output_parser.get_format_instructions(),
+            "conventional_commit_spec": CONVENTIONAL_COMMIT_SPEC,
+        },
     )
     chain = prompt_tpl | llm | output_parser
     return chain
 
 
-def generate_llm_commit_message(jira_ticket: str | None = None) -> str:
+def generate_llm_commit_message(jira_ticket: str | None = None, additional_message: str | None = None) -> str:
     """Generate a commit message for the changes."""
     changes = get_changes()
+    additional_message = additional_message or ""
     chain = create_llm_chain()
     assert changes, "No changes to commit"
     if len(changes.splitlines()) > 500:
         print("Warning: Changes are too long to commit. trimming to 500 lines")
         changes = "\n".join(changes.splitlines()[:500])
     commit_message = chain.invoke(
-        {"changes": changes, "jira_ticket": jira_ticket, "conventional_commit_spec": CONVENTIONAL_COMMIT_SPEC}
+        {
+            "changes": changes,
+            "additional_message": f"<additional_message>{additional_message}</additional_message>",
+        }
     )
     assert isinstance(commit_message, dict), "Commit message is not a dictionary"
     commit_message_object = ConventionalCommitMessage(**commit_message)

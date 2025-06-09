@@ -18,9 +18,10 @@ def main():
 @click.option("--jira-ticket", type=str, help="Jira ticket number.")
 @click.option("--dry-run", is_flag=True, help="Dry run the commit generation.")
 @click.option("--no-prompt", is_flag=True, help="Do not prompt for confirmation.")
-def generate_commit_command(jira_ticket: str, dry_run: bool, no_prompt: bool):
+@click.option("--additional-message", type=str, help="Additional message to be used to generate the commit message.")
+def generate_commit_command(jira_ticket: str, dry_run: bool, no_prompt: bool, additional_message: str | None):
     """Generate a commit message for the changes."""
-    commit_message = generate_llm_commit_message(jira_ticket)
+    commit_message = generate_llm_commit_message(jira_ticket, additional_message)
     click.echo(commit_message)
     if dry_run:
         click.echo("Dry run completed.")

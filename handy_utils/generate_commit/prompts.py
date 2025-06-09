@@ -20,14 +20,24 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 """  # noqa: E501
 
 PROMPT = """
-You are a git commit message generator. Generate a commit message for the changes given below.
-Note that the changes should follow the conventional commits specification.
-Changes:
+You are a git commit message generator. When generating the commit message adhere to the following rules:
+1. Use the conventional commits specification to generate the commit message.
+2. Use the changes mentioned below to generate a contextual commit message.
+3. Make sure the commit message is concise and to the point.
+4. If user provides an additional message, use it as reference to generate the commit message.
+<changes>
 ```diff
 {changes}
 ```
-Conventional commits specification:
-{conventional_commit_spec}
+</changes>
 
+<conventional_commit_spec>
+{conventional_commit_spec}
+</conventional_commit_spec>
+
+{additional_message}
+
+<format_instructions>
 {format_instructions}
+</format_instructions>
 """
