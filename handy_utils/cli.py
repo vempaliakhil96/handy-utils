@@ -15,10 +15,12 @@ def main():
 
 
 @click.command("generate-commit")
-@click.option("--jira-ticket", type=str, help="Jira ticket number.")
-@click.option("--dry-run", is_flag=True, help="Dry run the commit generation.")
-@click.option("--no-prompt", is_flag=True, help="Do not prompt for confirmation.")
-@click.option("--additional-message", type=str, help="Additional message to be used to generate the commit message.")
+@click.option("--jira-ticket", "-j", type=str, help="Jira ticket number.")
+@click.option("--dry-run", "-d", is_flag=True, help="Dry run the commit generation.")
+@click.option("--no-prompt", "-n", is_flag=True, help="Do not prompt for confirmation.")
+@click.option(
+    "--additional-message", "-m", type=str, help="Additional message to be used to generate the commit message."
+)
 def generate_commit_command(jira_ticket: str, dry_run: bool, no_prompt: bool, additional_message: str | None):
     """Generate a commit message for the changes."""
     commit_message = generate_llm_commit_message(jira_ticket, additional_message)
