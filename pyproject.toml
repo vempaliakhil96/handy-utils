@@ -27,6 +27,8 @@ dependencies = [
     "atlassian-python-api>=3.41.19,<4",
     "ruff>=0.9.4,<0.10",
     "types-pyyaml>=6.0.12.20250402",
+    "pydantic-ai[openai]>=0.3.5",
+    "diskcache>=5.6.3",
 ]
 
 [project.optional-dependencies]
@@ -97,6 +99,9 @@ line-length = 120
 select = ["E", "W", "F"]
 ignore = [ "E701", "E702"]
 
+[tool.mypy]
+ignore_missing_imports = true
+
 [tool.isort]
 multi_line_output = 3
 include_trailing_comma = true
@@ -105,6 +110,3 @@ use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 120
 skip_gitignore = true
-
-[tool.tox]
-isolated_build = true

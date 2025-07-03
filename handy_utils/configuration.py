@@ -43,7 +43,7 @@ def load_configuration() -> Configuration:
     return Configuration(**config)
 
 
-def load_llm(config: Configuration) -> ChatOpenAI:
+def load_langchain_llm(config: Configuration) -> ChatOpenAI:
     """Load the LLM from the configuration."""
     return ChatOpenAI(
         model=config.openai_model,

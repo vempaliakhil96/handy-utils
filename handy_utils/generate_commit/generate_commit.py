@@ -7,7 +7,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import Runnable
 from pydantic import BaseModel, Field
 
-from handy_utils.configuration import load_configuration, load_llm
+from handy_utils.configuration import load_configuration, load_langchain_llm
 from handy_utils.generate_commit.prompts import CONVENTIONAL_COMMIT_SPEC, PROMPT
 
 config = load_configuration()
@@ -26,7 +26,7 @@ def get_changes() -> str:
 
 
 def create_llm_chain() -> Runnable:
-    llm = load_llm(config)
+    llm = load_langchain_llm(config)
     output_parser = JsonOutputParser(pydantic_object=ConventionalCommitMessage)
     prompt_tpl = PromptTemplate.from_template(
         template=PROMPT,
