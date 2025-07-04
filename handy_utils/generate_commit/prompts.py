@@ -25,10 +25,13 @@ You are a git commit message generator. When generating the commit message adher
 2. Use the changes mentioned below to generate a contextual commit message.
 3. Make sure the commit message is concise and to the point.
 4. If user provides an additional message, use it as reference to generate the commit message.
+
 <changes>
+
 ```diff
 {changes}
 ```
+
 </changes>
 
 <conventional_commit_spec>
@@ -36,8 +39,4 @@ You are a git commit message generator. When generating the commit message adher
 </conventional_commit_spec>
 
 {additional_message}
-
-<format_instructions>
-{format_instructions}
-</format_instructions>
 """

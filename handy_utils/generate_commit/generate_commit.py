@@ -1,16 +1,18 @@
 """Generate a commit message for the changes."""
 
 import subprocess
+from typing import Any
 
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import Runnable
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from pydantic_ai import Agent, RunContext
+from pydantic_ai.models.openai import OpenAIModel
 
-from handy_utils.configuration import load_configuration, load_langchain_llm
+from handy_utils.configuration import load_configuration
 from handy_utils.generate_commit.prompts import CONVENTIONAL_COMMIT_SPEC, PROMPT
+from handy_utils.utils.unified_provider import UnifiedProvider
 
 config = load_configuration()
+model = OpenAIModel("gemini-2.5-flash", provider=UnifiedProvider())
 
 
 class ConventionalCommitMessage(BaseModel):
@@ -18,6 +20,75 @@ class ConventionalCommitMessage(BaseModel):
     description: str = Field(description="The description of the commit message", default="")
     body: str = Field(description="The body of the commit message", default="")
     footer: str = Field(description="The footer of the commit message", default="")
+    jira_ticket: str | None = Field(
+        default=None, description="The Jira ticket number to be included in the commit message"
+    )
+
+    @field_validator("type")
+    def commit_type_validator(cls, value: str) -> str:
+        """Validate the commit type."""
+        valid_types = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "chore"]
+        if value not in valid_types:
+            raise ValueError(f"Invalid commit type: {value}. Must be one of {valid_types}.")
+        return value
+
+    @field_validator("description")
+    def description_validator(cls, value: str) -> str:
+        """Validate the description length."""
+        if len(value) > 100:
+            raise ValueError("Description too long, must be less than 100 characters.")
+        return value
+
+    def __str__(self) -> str:
+        scope = f"({self.jira_ticket})" if self.jira_ticket else ""
+        commit_message_tpl = "{type}{scope}: {description}\n{body}\n\n{footer}"
+        return commit_message_tpl.format(
+            type=self.type,
+            scope=scope,
+            description=self.description,
+            body=self.body,
+            footer=self.footer,
+        )
+
+
+class CommitMessageInput(BaseModel):
+    changes: str = Field(description="The changes to be committed")
+    jira_ticket: str | None = Field(
+        default=None, description="The Jira ticket number to be included in the commit message"
+    )
+    additional_message: str | None = Field(
+        default=None, description="An additional message to be included in the commit message"
+    )
+
+    def model_post_init(self, __context: Any) -> None:
+        """Post-initialization to set changes if not provided."""
+        if self.additional_message is not None:
+            self.additional_message = (
+                "<additional_message>\n" + (self.additional_message or "") + "\n</additional_message>"
+            )
+
+    @field_validator("changes")
+    def changes_validator(cls, value: str) -> str:
+        """Validate the changes."""
+        if not value.strip():
+            raise ValueError("Changes cannot be empty.")
+        return value
+
+
+commit_message_gen_agent = Agent(
+    model=model,
+    deps_type=CommitMessageInput,
+    output_type=ConventionalCommitMessage,
+)
+
+
+@commit_message_gen_agent.instructions
+def system_prompt(ctx: RunContext[CommitMessageInput]) -> str:
+    return PROMPT.format(
+        changes=ctx.deps.changes,
+        additional_message=ctx.deps.additional_message or "",
+        conventional_commit_spec=CONVENTIONAL_COMMIT_SPEC,
+    )
 
 
 def get_changes() -> str:
@@ -25,53 +96,21 @@ def get_changes() -> str:
     return subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
 
 
-def create_llm_chain() -> Runnable:
-    llm = load_langchain_llm(config)
-    output_parser = JsonOutputParser(pydantic_object=ConventionalCommitMessage)
-    prompt_tpl = PromptTemplate.from_template(
-        template=PROMPT,
-        partial_variables={
-            "format_instructions": output_parser.get_format_instructions(),
-            "conventional_commit_spec": CONVENTIONAL_COMMIT_SPEC,
-        },
-    )
-    chain = prompt_tpl | llm | output_parser
-    return chain
-
-
 def generate_llm_commit_message(jira_ticket: str | None = None, additional_message: str | None = None) -> str:
     """Generate a commit message for the changes."""
-    changes = get_changes()
-    additional_message = additional_message or ""
-    chain = create_llm_chain()
-    assert changes, "No changes to commit"
-    if len(changes.splitlines()) > 500:
-        print("Warning: Changes are too long to commit. trimming to 500 lines")
-        changes = "\n".join(changes.splitlines()[:500])
-    commit_message = chain.invoke(
-        {
-            "changes": changes,
-            "additional_message": f"<additional_message>{additional_message}</additional_message>",
-        }
-    )
-    assert isinstance(commit_message, dict), "Commit message is not a dictionary"
-    commit_message_object = ConventionalCommitMessage(**commit_message)
-    return build_commit_message(commit_message_object, jira_ticket)
+    response = commit_message_gen_agent.run_sync(
+        "begin!",
+        deps=CommitMessageInput(
+            changes=get_changes(),
+            jira_ticket=jira_ticket,
+            additional_message=additional_message,
+        ),
+    ).output
+    if jira_ticket:
+        response.jira_ticket = jira_ticket
+    return str(response)
 
 
 def perform_commit(commit_message):
     """Perform the commit."""
     subprocess.run(["git", "commit", "-m", commit_message])
-
-
-def build_commit_message(commit_message_object: ConventionalCommitMessage, jira_ticket: str | None = None) -> str:
-    """Build the commit message."""
-    scope = f"({jira_ticket})" if jira_ticket else ""
-    commit_message_tpl = "{type}{scope}: {description}\n{body}\n\n{footer}"
-    return commit_message_tpl.format(
-        type=commit_message_object.type,
-        scope=scope,
-        description=commit_message_object.description,
-        body=commit_message_object.body,
-        footer=commit_message_object.footer,
-    )
