@@ -14,8 +14,6 @@ classifiers = [
 ]
 
 dependencies = [
-    "langchain",
-    "langchain-openai",
     "click",
     "pyyaml",
     "pymdown-extensions",
