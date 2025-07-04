@@ -39,6 +39,13 @@ class ConventionalCommitMessage(BaseModel):
             raise ValueError("Description too long, must be less than 100 characters.")
         return value
 
+    @field_validator("body")
+    def body_validator(cls, value: str) -> str:
+        """Validate the body of the commit message."""
+        if "\n" in value:
+            raise ValueError("Body cannot contain newlines. Please use a single line.")
+        return value
+
     def __str__(self) -> str:
         scope = f"({self.jira_ticket})" if self.jira_ticket else ""
         commit_message_tpl = "{type}{scope}: {description}\n{body}\n\n{footer}"
