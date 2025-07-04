@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict
 
-from langchain_openai import ChatOpenAI
 from yaml import Loader, dump, load  # type: ignore
 
 
@@ -41,17 +40,6 @@ def load_configuration() -> Configuration:
     with open(path, "r") as f:
         config = load(f, Loader=Loader)
     return Configuration(**config)
-
-
-def load_langchain_llm(config: Configuration) -> ChatOpenAI:
-    """Load the LLM from the configuration."""
-    return ChatOpenAI(
-        model=config.openai_model,
-        **config.model_kwargs,
-        default_headers=config.headers,
-        api_key=config.openai_api_key,  # type: ignore
-        base_url=config.base_url,
-    )
 
 
 def generate_config():
