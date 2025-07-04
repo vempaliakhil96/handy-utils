@@ -1,6 +1,6 @@
 [project]
 name = "handy-utils"
-version = "0.3.0"
+version = "0.4.0"
 description = "Handy Utils for daily use"
 authors = [{ name = "Akhil Vempali", email = "vempaliakhil96@gmail.com" }]
 requires-python = ">=3.10,<4.0"
